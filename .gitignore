@@ -1,0 +1,8 @@
+/env
+/data/*
+/figures/*
+/models/*
+.ipynb_checkpoints
+.DS_Store
+*.egg-info
+__pycache__
