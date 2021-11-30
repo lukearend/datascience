@@ -1,7 +1,15 @@
 export SHELL := /bin/bash
 export PYTHONPATH := $(shell pwd)
 
-init: env jupyter lint
+init: clean env jupyter lint
+
+clean:
+	rm -rf env && \
+	rm -f figures/* && \
+	rm -f data/interim/* && \
+	rm -f data/processed/* && \
+	rm -f data/raw/* && \
+	rm -f models/*
 
 env:		## Build virtual environment.
 	rm -rf env && \

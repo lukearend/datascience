@@ -1,5 +1,7 @@
 /env
-/data/*
+/data/interim/*
+/data/processed/*
+/data/raw/*
 /figures/*
 /models/*
 .ipynb_checkpoints
