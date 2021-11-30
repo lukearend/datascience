@@ -30,7 +30,7 @@ Project organization
 Usage
 ----------------------
 
-Run `make init` to set up virtual environment.
+Run `make init` to initialize repository (warning: deletes all generated files and data).
 
 The virtual environment must be activated to work interactively with python. To do this, run `source env/bin/activate` in the top-level directory.
 
