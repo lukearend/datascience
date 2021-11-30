@@ -33,7 +33,8 @@ jupyter:	## Install jupyter extensions.
 
 repo:		## Initialize as fresh git repository.
 	rm -rf .git && git init && \
-	git add . && git commit -m "first commit"
+	git add . data figures models notebooks reference src && \
+	git commit -m "first commit"
 
 notebook:	## Start a local notebook server.
 	@source env/bin/activate && \
