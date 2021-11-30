@@ -1,9 +1,4 @@
 /env
-/data/interim/*
-/data/processed/*
-/data/raw/*
-/figures/*
-/models/*
 .ipynb_checkpoints
 .DS_Store
 *.egg-info
