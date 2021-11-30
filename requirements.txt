@@ -2,7 +2,8 @@ jupyter
 jupyter_contrib_nbextensions
 matplotlib
 numpy
-scipy
-requests
 pycodestyle
+requests
+scipy
+tqdm
 -e .
