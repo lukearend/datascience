@@ -1,17 +1,26 @@
 export SHELL := /bin/bash
-export PYTHONPATH := $(shell pwd)
 
-init: clean env jupyter lint repo
+export ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+export DATA_RAW:=$(ROOT_DIR)/data/raw
+export DATA_TMP:=$(ROOT_DIR)/data/interim
+export DATA_FINAL:=$(ROOT_DIR)/data/processed
 
-clean:		## Remove all generated data and files.
+.PHONY: all
+all: help
+
+.PHONY: init clean env
+init:       ## Run repository setup.
+init: clean env lint
+
+clean:      ## Remove all generated data and files.
 	rm -rf env && \
+	rm -f $(DATA_RAW)/* && \
+	rm -f $(DATA_TMP)/* && \
+	rm -f $(DATA_FINAL)/* && \
 	rm -f figures/* && \
-	rm -f data/interim/* && \
-	rm -f data/processed/* && \
-	rm -f data/raw/* && \
 	rm -f models/*
 
-env:		## Build virtual environment.
+env:        ## Build virtual environment.
 	rm -rf env && \
 	python3 -m venv env && \
 	. env/bin/activate && \
@@ -20,32 +29,29 @@ env:		## Build virtual environment.
 	rm -rf *.egg-info && \
 	source env/bin/activate
 
-jupyter:	## Install jupyter extensions.
-	source env/bin/activate && \
+.PHONY: vim-bindings nbextensions notebook lint help
+vim-bindings:
+	@source env/bin/activate && \
 	jupyter contrib nbextensions install && \
 	cd $(shell jupyter --data-dir)/nbextensions && \
-	rm -rf vim_binding && \
-	git clone https://github.com/lambdalisue/jupyter-vim-binding vim_binding && \
-	jupyter nbextension enable vim_binding/vim_binding && \
+	git clone https://github.com/lambdalisue/jupyter-vim-binding vim_binding || \
+	cd vim_binding && git pull
+
+nbextensions: vim-bindings
+	@jupyter nbextension enable vim_binding/vim_binding && \
 	jupyter nbextension enable rubberband/main && \
 	jupyter nbextension enable toggle_all_line_numbers/main && \
 	jupyter nbextension enable varInspector/main
 
-repo:		## Initialize as fresh git repository.
-	rm -rf .git && git init && \
-	git add . data figures models notebooks reference src && \
-	git commit -m "first commit"
-
-notebook:	## Start a local notebook server.
+notebook:   ## Start a local notebook server.
+notebook: vim-bindings
 	@source env/bin/activate && \
 	cd notebooks && jupyter notebook
 
-lint: 		## Run code style checker.
+lint:       ## Run code style checker.
 	@source env/bin/activate && \
 	pycodestyle *.py --max-line-length 100 && \
 	echo "ok"
 
-help: 		## Show this help.
+help:       ## Show this help.
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
-
-.PHONY: init env jupyter notebook lint

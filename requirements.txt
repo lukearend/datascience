@@ -3,7 +3,6 @@ jupyter_contrib_nbextensions
 matplotlib
 numpy
 pycodestyle
-requests
 scipy
 tqdm
 -e .
